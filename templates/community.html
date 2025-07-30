@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Community | Rebite</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='community.css') }}">
+</head>
+<body>
+
+  <header>
+    <div class="header-content">
+      <h1>Community Food Listings</h1>
+      <a href="/options" class="home-button">Back</a>
+    </div>
+    <p>See what others have shared. You can request untouched or pet-friendly leftovers near you.</p>
+  </header>
+
+  <main class="cards-container">
+    {{ posts | safe}}
+  </main>
+  <script src="{{url_for('static', filename='community.js')}}"></script>
+</body>
+</html>

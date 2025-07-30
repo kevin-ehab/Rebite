@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Choose an Option | Rebite</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='options.css') }}">
+</head>
+<body>
+  <div class="options-container">
+    <div class="button-group">
+      <center>
+        <img class="logo"src="{{url_for('static', filename='logo.png')}}">
+      </center>
+      <h1>What would you like to do?</h1>
+      <a href="/community" class="option-button">Visit Community</a>
+      <a href="/logging_waste" class="option-button">Log Food Waste</a>
+    </div>
+  </div>
+</body>
+</html>

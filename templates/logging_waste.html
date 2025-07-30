@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Food Waste Entry</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='logging_waste.css')}}" />
+</head>
+<body>
+  <div class="container">
+    <h1>Food Waste Entry</h1>
+    <center>
+      <label for="type">Type of Waste:</label>
+      <select name="type" id="type" required>
+        <option value="for pets">For Pets</option>
+        <option value="untouched">Untouched</option>
+      </select><br><br>
+
+      <label for="name">Food Name:</label>
+      <input type="text" id="name" name="name" placeholder="e.g. Bread" required /><br><br>
+
+      <label for="date">Date of Making:</label>
+      <input type="date" id="date" name="date" required /><br><br>
+      <button type="button" onclick="submit()">Submit</button>
+    </center>
+  </div>
+  <script src="{{url_for('static', filename='logging_waste.js')}}"></script>
+</body>
+</html>
