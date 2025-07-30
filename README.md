@@ -50,12 +50,12 @@ Every day, tons of edible food are thrown away while others go hungry. **ReBite*
 │   ├── logging_waste.html
 │   └── community.html
 └── static/
-    └── (your CSS/JS files here)
+    └── (CSS/JS files)
 ```
 
 ---
 
-## 🕹️ Demo-Link: <a href="rebite.pythonanywhere.com">Rebite.com</a>
+## 🕹️ Demo-Link: <a href="https://rebite.pythonanywhere.com">Rebite.com</a>
 
 ---
 
