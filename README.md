@@ -51,6 +51,7 @@ Every day, tons of edible food are thrown away while others go hungry. **ReBite*
 │   └── community.html
 └── static/
     └── (CSS/JS files)
+    └── logo.png
 ```
 
 ---
