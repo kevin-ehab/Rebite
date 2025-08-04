@@ -4,6 +4,9 @@
 
 - 🐾 **For Pets** – suitable for animal consumption  
 - 🍽️ **Untouched** – fresh and edible food for people
+<p align="center">
+  <img src="static/logo.png" alt="Description" width="300"/>
+</p>
 
 ---
 
