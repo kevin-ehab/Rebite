@@ -42,19 +42,28 @@ Every day, tons of edible food are thrown away while others go hungry. **ReBite*
 ## 📁 File Structure
 
 ```
-├── app.py               # Main Flask backend
-├── Classified.csv       # Stores user credentials and info
-├── posts.html           # Stores community posts as HTML
-├── templates/
-│   ├── index.html
-│   ├── login.html
-│   ├── signup.html
-│   ├── options.html
-│   ├── logging_waste.html
-│   └── community.html
-└── static/
-    └── (CSS/JS files)
-    └── logo.png
+.
+├── Classified.csv
+├── app.py
+├── posts.html
+├── static
+│   ├── community.css
+│   ├── community.js
+│   ├── logging_waste.css
+│   ├── logging_waste.js
+│   ├── login&signup.css
+│   ├── login.js
+│   ├── logo.png
+│   ├── options.css
+│   ├── signup.js
+│   └── style.css
+└── templates
+    ├── community.html
+    ├── index.html
+    ├── logging_waste.html
+    ├── login.html
+    ├── options.html
+    └── signup.html
 ```
 
 ---
