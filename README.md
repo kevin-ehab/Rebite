@@ -42,9 +42,8 @@ Every day, tons of edible food are thrown away while others go hungry. **ReBite*
 ## 📁 File Structure
 
 ```
-.
-├── Classified.csv
 ├── app.py
+├── Classified.csv
 ├── posts.html
 ├── static
 │   ├── community.css
