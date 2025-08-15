@@ -21,7 +21,8 @@
 
       <label for="date">Date of Making:</label>
       <input type="date" id="date" name="date" required /><br><br>
-      <button type="button" onclick="submit()">Submit</button>
+      <button onclick="submit()">Submit</button>
+      <button onclick="window.location = '/options'">Back</button>
     </center>
   </div>
   <script src="{{url_for('static', filename='logging_waste.js')}}"></script>

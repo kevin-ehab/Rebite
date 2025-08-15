@@ -17,4 +17,5 @@ function submit(event) {
     console.error("Error:", error);
     alert("Failed to submit food waste.");
   });
+  window.location = '/options'
 }
