@@ -6,6 +6,7 @@ function signUp(){
     fetch('/signup2', {
         method: ['Post'],
         headers: {'Content-Type': 'application/json'},
+        credentials: 'include',
         body: JSON.stringify({email, password, address, name})
     })
     .then(res => res.json())

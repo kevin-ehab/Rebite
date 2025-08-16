@@ -10,14 +10,14 @@
 
   <header>
     <div class="header-content">
-      <h1>Community Food Listings</h1>
+      <h1>🍗Community Food Listings🍞</h1>
       <a href="/options" class="home-button">Back</a>
     </div>
-    <p>See what others have shared. You can request untouched or pet-friendly leftovers near you.</p>
+    <p>🎉See what others have shared. You can request untouched or pet-friendly leftovers near you.🎉</p>
   </header>
 
   <main class="cards-container">
-    {{ posts | safe}}
+    {% include 'posts.html' %}
   </main>
   <script src="{{url_for('static', filename='community.js')}}"></script>
 </body>

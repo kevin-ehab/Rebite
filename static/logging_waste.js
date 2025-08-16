@@ -1,21 +1,29 @@
 function submit(event) {
-  const name = document.getElementById('name').value;
-  const type = document.getElementById('type').value;
-  const date = document.getElementById('date').value;
+  let form = new FormData()
 
+  let name = document.getElementById('name').value
+  form.append('name', name)
+
+  let type = document.getElementById('type').value
+  form.append('type', type)
+
+  let date = document.getElementById('date').value
+  form.append('date', date)
+  let image = document.getElementById('image').files[0]
+  form.append('image', image)
+  if (!image){
+    alert('You need to choose an image.')
+    return
+  }
   fetch('/logging_waste2', {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, type, date })
+    credentials: 'include',
+    body: form
   })
   .then(response => response.json())
   .then(data => {
-    alert("Food posted!");
-    console.log(data);
+    console.log(data)
   })
-  .catch(error => {
-    console.error("Error:", error);
-    alert("Failed to submit food waste.");
-  });
+  alert("Food posted!")
   window.location = '/options'
 }
