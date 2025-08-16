@@ -27,16 +27,21 @@ Every day, tons of edible food are thrown away while others go hungry. **ReBite*
   - Password validation (8+ characters)
 
 - 📝 **Log Waste**
-  - Add a food name, type (for pets / untouched), and preparation date
+  - Add a picture of the food, food name, type (for pets / untouched), and preparation date
   - Posts include the sharer's name and location
 
 - 📢 **Community Feed**
   - View logged food as shareable cards
   - Each card has an **Order** button to request the item
+  <p align="center">
+    <img width="1341" height="630" alt="community2" src="https://github.com/user-attachments/assets/dbc3322e-fe83-4c0e-aad0-affa5fc25425" />
+  </p>
 
 - 📧 **Order System**
   - Clicking **Order** sends a request and simulates an email to the giver
-
+  <p align="center">
+    <img width="1026" height="518" alt="mail" src="https://github.com/user-attachments/assets/e21aeb18-329b-44dc-9e22-c068e1932bcd" />
+  </p>
 ---
 
 ## 📁 File Structure
@@ -75,7 +80,6 @@ Every day, tons of edible food are thrown away while others go hungry. **ReBite*
 
 - Data is stored locally in CSV and HTML files (no database required).
 - Passwords are stored as plaintext for simplicity – for production, use hashed passwords.
-- No real email is sent when ordering – this can be integrated later using services like SendGrid or SMTP.
 
 ---
 
@@ -94,5 +98,5 @@ This project is open-source under the MIT License.
 ## ❤️ Built With
 
 - Python & Flask
-- HTML/CSS (Jinja2 templating)
+- HTML/CSS
 - pandas
