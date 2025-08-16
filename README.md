@@ -97,6 +97,5 @@ This project is open-source under the MIT License.
 
 ## ❤️ Built By Kevin Ehab With
 
-- Python & Flask
-- HTML/CSS
-- pandas
+- Python & Flask & Pandas
+- HTML/CSS/JavaScript
