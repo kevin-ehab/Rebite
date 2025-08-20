@@ -2,13 +2,15 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
-import os
 
+import os
+basedir = os.path.abspath(os.path.dirname(__file__))
 import pandas as pd
 classified = pd.read_csv('Classified.csv')
 
 import json
-with open("posts.json") as f:
+
+with open(os.path.join(basedir, "posts.json")) as f:
     posts = json.load(f)
 
 from flask import Flask, render_template, jsonify, request, session
@@ -37,6 +39,8 @@ def logging_waste_page():
 
 @app.route('/community')
 def community_page():
+    with open(os.path.join(basedir, "posts.json")) as f:
+        posts = json.load(f)
     return render_template('community.html', posts=posts[::-1])
 
 @app.route('/explore', methods=['POST'])
@@ -92,7 +96,7 @@ def logging_waste():
     account = session.get("account")
     if not account:
         return jsonify({"status": "error", "message": "Not logged in"}), 401
-    
+
     food_type = request.form.get('type')
     food_name = request.form.get('name')
     date_of_making = request.form.get('date')
@@ -102,13 +106,13 @@ def logging_waste():
 
     #saving the image to be used
     image = request.files.get('image')
-    image.save(os.path.join('static', 'image_uploads', f'{food_name}-{date_of_making}-{user_name}.jpg'))
+    image.save(os.path.join(basedir, 'static', 'image_uploads', f'{food_name}-{date_of_making}-{user_name}.jpg'))
 
     food_name_html = food_name.replace('"', '&quot;')
     food_type_html = food_type.replace('"', '&quot;')
     date_html = date_of_making.replace('"', '&quot;')
     user_address = user_data["address"].replace('"', '&quot;')
-    image_path = os.path.join("static", "image_uploads", f"{food_name}-{date_of_making}-{user_name}.jpg")
+    image_path = os.path.join(basedir, "static", "image_uploads", f"{food_name}-{date_of_making}-{user_name}.jpg")
     # make post
 
     posts.append({
@@ -120,7 +124,7 @@ def logging_waste():
         'user_name': user_name,
         'account': account
     })
-    with open("posts.json", "w") as f:
+    with open(os.path.join(basedir, "posts.json"), 'w') as f:
         json.dump(posts, f, indent=4)
 
     return jsonify({"status": "success", "message": "Post added"})
@@ -138,7 +142,7 @@ def order():
     user_name = data.get('user_name')
     food_sender_email = data.get('account')
     address = data.get('address')
-    image_path = os.path.join("static", "image_uploads", f"{food_name}-{date}-{user_name}.jpg")
+    image_path = os.path.join(basedir, "static", "image_uploads", f"{food_name}-{date}-{user_name}.jpg")
     sender_email = "kevinplays165@gmail.com"
     receiver_email = account
     password = 'bymiztbypmfztxaw'
@@ -160,25 +164,26 @@ def order():
 
     body = render_template('email.html', **data)
     message.attach(MIMEText(body, "html"))
+    try:
+        with open(image_path, "rb") as img_file:
+            img = MIMEImage(img_file.read())
+            img.add_header("Content-ID", "<image1>")
+            message.attach(img)
 
-    with open(image_path, "rb") as img_file:
-        img = MIMEImage(img_file.read())
-        img.add_header("Content-ID", "<image1>")
-        message.attach(img)
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(sender_email, password)
+            server.sendmail(sender_email, receiver_email, message.as_string())
+        print("✅ Email sent successfully!")
+    except:
+        print('error')
 
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-        server.login(sender_email, password)
-        server.sendmail(sender_email, receiver_email, message.as_string())
-
-
-    print("✅ Email sent successfully!")
 
     #Remove the post
 
     for i in posts:
-        if i['image_path'] == image_path:
+        if (i['food_name_html'] == food_name) and (i['date_html'] == date) and (i['user_name'] == user_name):
             posts.remove(i)
-            with open("posts.json", "w") as f:
+            with open(os.path.join(basedir, "posts.json"), 'w') as f:
                 json.dump(posts, f, indent=4)
             break
 
