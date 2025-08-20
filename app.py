@@ -143,9 +143,9 @@ def order():
     food_sender_email = data.get('account')
     address = data.get('address')
     image_path = os.path.join(basedir, "static", "image_uploads", f"{food_name}-{date}-{user_name}.jpg")
-    sender_email = "kevinplays165@gmail.com"
+    sender_email = "###########"
     receiver_email = account
-    password = 'bymiztbypmfztxaw'
+    password = '############'
 
     message = MIMEMultipart()
     message["From"] = sender_email
