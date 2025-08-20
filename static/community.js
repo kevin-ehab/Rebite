@@ -1,29 +1,45 @@
-const btns = document.querySelectorAll('button');
-
+const btns = document.querySelectorAll('.order-btn');
 btns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        btn.innerText = '✅ Ordered ✅';
-        btn.style.backgroundColor = 'green';
-        btn.style.transform = 'scale(1.05)';
-        btn.style.transition = 'all 0.3s ease';
-        btn.disabled = true;
+  btn.addEventListener('click', () => {
+    const food_name = btn.dataset.foodName;
+    const food_type = btn.dataset.foodType;
+    const date = btn.dataset.date;
+    const user_name = btn.dataset.userName;
+    const address = btn.dataset.userAddress;
+    const account = btn.dataset.account;
 
-        // Slight bounce effect
-        setTimeout(() => {
-            btn.style.transform = 'scale(1)';
-        }, 150);
-    });
-});
+    btn.innerText = '⏳ Ordering... ⏳'
+    btn.style.backgroundColor = 'yellow'
 
-function order(food_name, food_type, date, user_name, address, account) {
     fetch('/order', {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: 'include',
-        body: JSON.stringify({ food_name, food_type, date, user_name, address, account })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: 'include',
+      body: JSON.stringify({ food_name, food_type, date, user_name, address, account })
     })
     .then(res => res.json())
     .then(data => {
-        alert(data.message);
+      if (!data.error) {
+        btn.innerText = '✅ Ordered ✅';
+        btn.style.backgroundColor = 'green';
+        btn.disabled = true;
+
+        btn.style.transform = 'scale(1.05)';
+        btn.style.transition = 'all 0.3s ease';
+        setTimeout(() => {
+          btn.style.transform = 'scale(1)';
+        }, 150);
+      } else {
+        btn.innerText = '❌ Not Ordered ❌';
+        btn.style.backgroundColor = 'red';
+      }
+
+      alert(data.message);
+    })
+    .catch(err => {
+      console.error("Order failed:", err);
+      btn.innerText = '❌ Error ❌';
+      btn.style.backgroundColor = 'red';
     });
-}
+  });
+});

@@ -2,11 +2,14 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
-
 import os
 
 import pandas as pd
 classified = pd.read_csv('Classified.csv')
+
+import json
+with open("posts.json") as f:
+    posts = json.load(f)
 
 from flask import Flask, render_template, jsonify, request, session
 app = Flask(__name__)
@@ -34,7 +37,12 @@ def logging_waste_page():
 
 @app.route('/community')
 def community_page():
-    return render_template('community.html')
+    return render_template('community.html', posts=posts[::-1])
+
+@app.route('/explore', methods=['POST'])
+def explore():
+    session['account'] = None
+    return jsonify({"message": "explore"})
 
 @app.route('/login2', methods=['POST'])
 def login():
@@ -80,10 +88,10 @@ def signup():
 
 @app.route("/logging_waste2", methods=['POST'])
 def logging_waste():
+    global posts
     account = session.get("account")
     if not account:
         return jsonify({"status": "error", "message": "Not logged in"}), 401
-    
     
     food_type = request.form.get('type')
     food_name = request.form.get('name')
@@ -100,32 +108,29 @@ def logging_waste():
     food_type_html = food_type.replace('"', '&quot;')
     date_html = date_of_making.replace('"', '&quot;')
     user_address = user_data["address"].replace('"', '&quot;')
-
+    image_path = os.path.join("static", "image_uploads", f"{food_name}-{date_of_making}-{user_name}.jpg")
     # make post
-    post = f'<div class="food-card">'
-    post += f' <img src="{os.path.join("static", "image_uploads", f"{food_name}-{date_of_making}-{user_name}.jpg")}" style="width:100%; border-radius:10px;">'
-    post += f' <h2>{food_name_html}</h2>'
-    post += f' <p>Type: {food_type_html}</p>'
-    post += f' <p>Made on: {date_html}</p>'
-    post += f' <p>From: {user_name} - {user_address}</p>'
-    post += f' <button onclick="order(\'{food_name_html}\', \'{food_type_html}\', \'{date_html}\', \'{user_name}\', \'{user_address}\', \'{account}\')">Order</button>'
-    post += '</div>'
 
-    # Append to posts file
-    with open(os.path.join(app.root_path, 'templates', 'posts.html'), 'r', encoding='utf-8') as file:
-        old_content = file.read()
-
-    # Write new content at the top
-    with open(os.path.join(app.root_path, 'templates', 'posts.html'), 'w', encoding='utf-8') as file:
-        file.write(f'{post}\n{old_content}')
+    posts.append({
+        'image_path': image_path,
+        'food_name_html': food_name_html,
+        'food_type_html': food_type_html,
+        'date_html': date_html,
+        'user_address': user_address,
+        'user_name': user_name,
+        'account': account
+    })
+    with open("posts.json", "w") as f:
+        json.dump(posts, f, indent=4)
 
     return jsonify({"status": "success", "message": "Post added"})
 
 @app.route('/order', methods=['POST'])
 def order():
+    global posts
     account = session.get("account")
     if not account:
-        return jsonify({"status": "error", "message": "Not logged in"}), 401
+        return jsonify({"error": 1, "message": "Not logged in"}), 401
     data = request.get_json()
     food_name = data.get('food_name')
     food_type = data.get('food_type')
@@ -134,9 +139,9 @@ def order():
     food_sender_email = data.get('account')
     address = data.get('address')
     image_path = os.path.join("static", "image_uploads", f"{food_name}-{date}-{user_name}.jpg")
-    sender_email = "###"
+    sender_email = "kevinplays165@gmail.com"
     receiver_email = account
-    password = '###'
+    password = 'bymiztbypmfztxaw'
 
     message = MIMEMultipart()
     message["From"] = sender_email
@@ -160,7 +165,7 @@ def order():
         img = MIMEImage(img_file.read())
         img.add_header("Content-ID", "<image1>")
         message.attach(img)
-        
+
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
         server.login(sender_email, password)
         server.sendmail(sender_email, receiver_email, message.as_string())
@@ -168,24 +173,14 @@ def order():
 
     print("✅ Email sent successfully!")
 
-    with open(os.path.join(app.root_path, 'templates', 'posts.html'), 'r', encoding='utf-8') as file:
-        lines = file.readlines()
-    post = f'<div class="food-card">'
-    post += f' <img src="{image_path}" style="width:100%; border-radius:10px;">'
-    post += f' <h2>{food_name}</h2>'
-    post += f' <p>Type: {food_type}</p>'
-    post += f' <p>Made on: {date}</p>'
-    post += f' <p>From: {user_name} - {address}</p>'
-    post += f' <button onclick="order(\'{food_name}\', \'{food_type}\', \'{date}\', \'{user_name}\', \'{address}\', \'{food_sender_email}\')">Order</button>'
-    post += '</div>'
-    
-    lines = [line.strip() for line in lines]
-    lines.remove(post)
+    #Remove the post
 
-    with open(os.path.join(app.root_path, 'templates', 'posts.html'), 'w', encoding='utf-8') as file:
-        for line in lines:
-            file.write(line + '\n')
-
+    for i in posts:
+        if i['image_path'] == image_path:
+            posts.remove(i)
+            with open("posts.json", "w") as f:
+                json.dump(posts, f, indent=4)
+            break
 
     return jsonify({'message': "Success! Check your email for more info."})
 

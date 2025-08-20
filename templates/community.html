@@ -17,7 +17,24 @@
   </header>
 
   <main class="cards-container">
-    {% include 'posts.html' %}
+    {% for post in posts %}
+    <div class="food-card">
+     <img src="{{post.image_path}}" style="width:100%; border-radius:10px;">
+     <h2>{{post.food_name_html}}</h2>
+     <p>Type: {{post.food_type_html}}</p>
+     <p>Made on: {{post.date_html}}</p>
+     <p>From: {{post.user_name}} - {{post.user_address}}</p>
+      <button 
+      class="order-btn"
+      data-food-name="{{post.food_name_html}}"
+      data-food-type="{{post.food_type_html}}"
+      data-date="{{post.date_html}}"
+      data-user-name="{{post.user_name}}"
+      data-user-address="{{post.user_address}}"
+      data-account="{{post.account}}"
+      >Order</button>
+    </div>
+    {% endfor %}
   </main>
   <script src="{{url_for('static', filename='community.js')}}"></script>
 </body>
